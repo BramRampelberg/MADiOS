@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		29BA0C8A2D25F88E00F0376D /* SlidingTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 29BA0C892D25F88E00F0376D /* SlidingTabView */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		299343812CB1A2000023C9D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29BA0C8A2D25F88E00F0376D /* SlidingTabView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = MADiOS;
 			packageProductDependencies = (
+				29BA0C892D25F88E00F0376D /* SlidingTabView */,
 			);
 			productName = MADiOS;
 			productReference = 2993436E2CB1A1FE0023C9D4 /* MADiOS.app */;
@@ -196,6 +202,9 @@
 			);
 			mainGroup = 299343652CB1A1FE0023C9D4;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2993436F2CB1A1FE0023C9D4 /* Products */;
 			projectDirPath = "";
@@ -553,6 +562,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/QuynhNguyen/SlidingTabView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		29BA0C892D25F88E00F0376D /* SlidingTabView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */;
+			productName = SlidingTabView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 299343662CB1A1FE0023C9D4 /* Project object */;
 }
