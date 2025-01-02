@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A348" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Reservation" representedClassName="Reservation" syncable="YES" codeGenerationType="class">
+        <attribute name="batteryId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="boatId" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="boatPersonalName" attributeType="String"/>
+        <attribute name="currentBatteryUserId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="currentBatteryUserName" optional="YES" attributeType="String"/>
+        <attribute name="currentHolderCity" optional="YES" attributeType="String"/>
+        <attribute name="currentHolderEmail" optional="YES" attributeType="String"/>
+        <attribute name="currentHolderNumber" optional="YES" attributeType="String"/>
+        <attribute name="currentHolderPhoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="currentHolderPostalCode" optional="YES" attributeType="String"/>
+        <attribute name="currentHolderStreet" optional="YES" attributeType="String"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="end" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="Integer 32" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isRemoved" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="mentorName" optional="YES" attributeType="String"/>
+        <attribute name="start" attributeType="Date" usesScalarValueType="NO"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+</model>
