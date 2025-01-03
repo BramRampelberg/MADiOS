@@ -9,14 +9,13 @@
 import SwiftUI
 
 struct ReservationsPage: View {
-    typealias ReservationType = ReservationsModel.ReservationType
-    @EnvironmentObject var reservationsViewModel: ReservationsViewModel
+    @StateObject var reservationsViewModel = ReservationsViewModel()
     
     var body: some View {
             VStack {
                 ReservationTypePicker()
                 ReservationsList()
-            }
+            }.environmentObject(reservationsViewModel)
             .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
                 ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationsViewModel.reservationDetails)
                     .presentationDetents([.medium, .large])

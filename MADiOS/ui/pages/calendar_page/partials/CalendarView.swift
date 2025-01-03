@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct Calendar: View {
+struct CalendarView: View {
    
     
     var body: some View {
@@ -17,5 +17,5 @@ struct Calendar: View {
 }
 
 #Preview {
-    Calendar()
+    CalendarView()
 }

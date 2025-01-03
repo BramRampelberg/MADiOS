@@ -17,7 +17,7 @@ struct CalendarPage: View {
             SlidingTabView(selection: $selectedTab, tabs: ["Calendar", "Reservations"])
             MaximizedContainer {
                 if selectedTab == 0 {
-                    Calendar()
+                    CalendarView()
                 }
                 if selectedTab == 1 {
                     ReservationsPage()

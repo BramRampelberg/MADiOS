@@ -17,8 +17,24 @@ class ReservationRepository {
         
     }
     
-    func getReservations () -> [ReservationEntity] {
+    func getReservations (isPast: Bool, isCanceled: Bool) -> [ReservationEntity] {
+        let calendar = Calendar(identifier: .gregorian)
+        let startOfDay = calendar.startOfDay(for: Date()) as NSDate
+        
         let request = NSFetchRequest<ReservationEntity>(entityName: "ReservationEntity")
+        let isCanceledPredicate = NSPredicate(format: "isRemoved = %@", isCanceled as NSNumber)
+        
+        if !isCanceled {
+            if isPast {
+                request.predicate = NSCompoundPredicate(type: .and, subpredicates: [isCanceledPredicate, NSPredicate(format: "date < %@", startOfDay)])
+            }
+            else {
+                request.predicate = NSCompoundPredicate(type: .and, subpredicates: [isCanceledPredicate, NSPredicate(format: "date >= %@", startOfDay)])
+            }
+        }
+        else {
+            request.predicate = isCanceledPredicate
+        }
         
         do {
             return try context.fetch(request)

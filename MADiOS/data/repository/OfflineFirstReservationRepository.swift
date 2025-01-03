@@ -9,10 +9,11 @@
 import Foundation
 
 class OfflineFirstReservationRepository {
+    
     private let reservationRepo = ReservationRepository()
     
-    func getReservations() -> [Reservation] {
-        reservationRepo.getReservations().map { enitity in
+    func getReservations(isPast: Bool, isCanceled: Bool) -> [Reservation] {
+        reservationRepo.getReservations(isPast: isPast, isCanceled: isCanceled).map { enitity in
             Reservation(fromEntity: enitity)
         }
     }

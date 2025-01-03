@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct ReservationTypePicker: View {
-    typealias ReservationType = ReservationsModel.ReservationType
     @EnvironmentObject var reservationsViewModel: ReservationsViewModel
     
     var body: some View {

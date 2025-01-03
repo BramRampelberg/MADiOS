@@ -29,10 +29,10 @@ struct ReservationsModel {
     mutating func changeSelectedReservationType(to type: ReservationType){
         selectedReservationType = type
     }
-    
-    enum ReservationType {
-        case upcoming
-        case old
-        case canceled
-    }
+}
+
+enum ReservationType {
+    case upcoming
+    case old
+    case canceled
 }

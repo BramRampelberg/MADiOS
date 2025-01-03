@@ -9,18 +9,19 @@
 import Foundation
 
 
-class ReservationsViewModel: ObservableObject, Observable {
-    typealias ReservationType = ReservationsModel.ReservationType
+class ReservationsViewModel: ObservableObject {
     
     private let reservationRepo = OfflineFirstReservationRepository()
     
     init() {
         // TODO: cleanup
+        let calendar = Calendar(identifier: .gregorian)
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date())
         self.reservationsModel = ReservationsModel(reservations: [], selectedReservationType: ReservationType.upcoming)
-        for index in 0...10 {
-            addReservation(Reservation(start: Date(), end: Date(), date: Date(), boatId: 1, boatPersonalName: "boatName", id: index, isDeleted: false))
+        for index in 0...20 {
+            addReservation(Reservation(start: Date(), end: Date(), date: index % 2 == 0 ? yesterday ?? Date() : Date(), boatId: 1, boatPersonalName: "boatName", id: index, isDeleted: index % 3 == 0))
         }
-        self.reservationsModel.setReservations(to: reservationRepo.getReservations())
+        self.reservationsModel.setReservations(to: getReservations())
     }
     
     @Published private var reservationsModel: ReservationsModel
@@ -57,6 +58,7 @@ class ReservationsViewModel: ObservableObject, Observable {
         }
         set {
             reservationsModel.changeSelectedReservationType(to: newValue)
+            reservationsModel.setReservations(to: getReservations())
         }
     }
     
@@ -71,6 +73,11 @@ class ReservationsViewModel: ObservableObject, Observable {
     func addReservation(_ reservation: Reservation) {
         //TODO: cleanup
         reservationRepo.addReservation(reservation)
-        self.reservationsModel.setReservations(to: reservationRepo.getReservations())
+        reservationsModel.setReservations(to: getReservations())
+    }
+    
+    func getReservations() -> [Reservation] {
+        let type = reservationsModel.selectedReservationType
+        return reservationRepo.getReservations(isPast: type == ReservationType.old, isCanceled: type == ReservationType.canceled)
     }
 }
