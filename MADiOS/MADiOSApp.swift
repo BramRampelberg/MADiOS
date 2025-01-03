@@ -12,7 +12,7 @@ import SwiftData
 struct MADiOSApp: App {
     var body: some Scene {
         WindowGroup {
-            CalendarPage()
+            Navigation()
         }
     }
 }

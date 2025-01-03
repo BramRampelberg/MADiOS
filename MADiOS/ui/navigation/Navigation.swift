@@ -10,12 +10,15 @@ import SwiftUI
 
 struct Navigation: View {
     @State var selectedPage = Page.calendar
+    @StateObject var reservationsViewModel = ReservationsViewModel()
     
     var body: some View {
         TabView(selection: $selectedPage) {
-            CalendarPage().tabItem{
-                Label("Calendar", systemImage: "calendar")
-            }.tag(Page.calendar)
+            CalendarPage()
+                .environmentObject(reservationsViewModel)
+                .tabItem{
+                    Label("Calendar", systemImage: "calendar")
+                }.tag(Page.calendar)
             ReservationsPage().tabItem{
                 Label("Notifications", systemImage: "bell")
             }.tag(Page.notifications)
@@ -33,5 +36,7 @@ enum Page: Hashable {
 }
 
 #Preview {
-    Navigation()
+    @Previewable @StateObject var reservationsViewModel = ReservationsViewModel()
+    
+    Navigation().environmentObject(reservationsViewModel)
 }
