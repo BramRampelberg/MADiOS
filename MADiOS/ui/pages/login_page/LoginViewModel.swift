@@ -47,14 +47,14 @@ class LoginViewModel: ObservableObject {
         loginModel.changeLoginState(to: .loading)
         
         Task {
-            let success = await auth0Repo.login(email: loginModel.email, password: loginModel.password)
-            if (success){
+            let result = await auth0Repo.login(email: loginModel.email, password: loginModel.password)
+            if (result.isSuccess){
                 loginModel.setEmail(to: "")
                 loginModel.setPassword(to: "")
                 loginModel.changeLoginState(to: .loggedIn)
             }
             else {
-                loginModel.changeLoginState(to: .error("Failed to log in"))
+                loginModel.changeLoginState(to: .error(result.failureCause!))
             }
         }
     }

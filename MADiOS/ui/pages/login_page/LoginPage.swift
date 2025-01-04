@@ -19,6 +19,9 @@ struct LoginPage: View {
             if (loginViewModel.loginState.isLoading) {
                 ProgressView()
             }
+            if (loginViewModel.loginState.hasError) {
+                Text(loginViewModel.loginState.errorDescription!).padding(.horizontal, 20).foregroundColor(.red)
+            }
             LoginButton()
             Spacer()
         }

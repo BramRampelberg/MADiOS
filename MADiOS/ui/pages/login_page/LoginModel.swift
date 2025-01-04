@@ -34,22 +34,29 @@ enum LoginState {
     
     var isLoading: Bool {
         switch self {
-            case .loading: return true
-            default: return false
+        case .loading: return true
+        default: return false
         }
     }
     
     var isLoggedIn: Bool {
         switch self {
-            case .loggedIn: return true
-            default: return false
+        case .loggedIn: return true
+        default: return false
         }
     }
     
     var hasError: Bool {
         switch self {
-            case .error: return true
-            default: return false
+        case .error: return true
+        default: return false
+        }
+    }
+    
+    var errorDescription: String? {
+        switch self {
+        case .error(let description): return description
+        default: return nil
         }
     }
 }

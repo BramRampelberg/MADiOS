@@ -17,14 +17,16 @@ class Auth0Repository {
     private let context = CoreDataStack.shared.persistentContainer.viewContext
     private let sharedCoreDataStack = CoreDataStack.shared
     
-    func login(email: String, password: String) async -> Bool {
+    func login(email: String, password: String) async -> Result<Void> {
         do {
             let credentials = try await auth0Service.login(email: email, password: password)
-            return credentialsManager.store(credentials: credentials)
+            return credentialsManager.store(credentials: credentials) ? Result.success(data: Void()) : Result.failure(cause: "Failed to store credentials")
+        }
+        catch let error as Auth0APIError {
+            return Result.failure(cause: error.cause?.localizedDescription ?? error.localizedDescription, error: error)
         }
         catch {
-            print(error.localizedDescription)
-            return false
+            return Result.failure(cause: error.localizedDescription, error: error)
         }
     }
     
