@@ -9,7 +9,6 @@
 import Foundation
 
 class OfflineFirstReservationRepository {
-    
     private let reservationRepo = ReservationRepository()
     
     func getReservations(isPast: Bool, isCanceled: Bool) -> [Reservation] {

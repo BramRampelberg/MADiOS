@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29A3E92B2D284D7100C7A1F1 /* Auth0 in Frameworks */ = {isa = PBXBuildFile; productRef = 29A3E92A2D284D7100C7A1F1 /* Auth0 */; };
 		29BA0C8A2D25F88E00F0376D /* SlidingTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 29BA0C892D25F88E00F0376D /* SlidingTabView */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,11 @@
 			path = MADiOSUITests;
 			sourceTree = "<group>";
 		};
+		29A3E92C2D28503B00C7A1F1 /* config */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = config;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29BA0C8A2D25F88E00F0376D /* SlidingTabView in Frameworks */,
+				29A3E92B2D284D7100C7A1F1 /* Auth0 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +87,7 @@
 		299343652CB1A1FE0023C9D4 = {
 			isa = PBXGroup;
 			children = (
+				29A3E92C2D28503B00C7A1F1 /* config */,
 				299343702CB1A1FE0023C9D4 /* MADiOS */,
 				299343832CB1A2000023C9D4 /* MADiOSTests */,
 				2993438D2CB1A2000023C9D4 /* MADiOSUITests */,
@@ -114,10 +122,12 @@
 			);
 			fileSystemSynchronizedGroups = (
 				299343702CB1A1FE0023C9D4 /* MADiOS */,
+				29A3E92C2D28503B00C7A1F1 /* config */,
 			);
 			name = MADiOS;
 			packageProductDependencies = (
 				29BA0C892D25F88E00F0376D /* SlidingTabView */,
+				29A3E92A2D284D7100C7A1F1 /* Auth0 */,
 			);
 			productName = MADiOS;
 			productReference = 2993436E2CB1A1FE0023C9D4 /* MADiOS.app */;
@@ -204,6 +214,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */,
+				29A3E9292D284D7100C7A1F1 /* XCRemoteSwiftPackageReference "Auth0" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2993436F2CB1A1FE0023C9D4 /* Products */;
@@ -564,6 +575,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		29A3E9292D284D7100C7A1F1 /* XCRemoteSwiftPackageReference "Auth0" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/Auth0.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.0;
+			};
+		};
 		29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/QuynhNguyen/SlidingTabView";
@@ -575,6 +594,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		29A3E92A2D284D7100C7A1F1 /* Auth0 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29A3E9292D284D7100C7A1F1 /* XCRemoteSwiftPackageReference "Auth0" */;
+			productName = Auth0;
+		};
 		29BA0C892D25F88E00F0376D /* SlidingTabView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */;

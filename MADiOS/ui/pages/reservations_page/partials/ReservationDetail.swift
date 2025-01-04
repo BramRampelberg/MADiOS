@@ -14,7 +14,7 @@ struct ReservationDetail: View {
     
     let padding: CGFloat = 16
     let groupSpacing: CGFloat = 8
-    let groupTitleColor: Color = Color(hex: "#FF42C4BE")
+    let groupTitleColor: Color = Colors.primary
     let groupTitleFont: Font = .title2
     
     var body: some View {
