@@ -81,6 +81,7 @@ class ReservationsViewModel: ObservableObject {
     var isReservationCancelable: Bool {
         if let currentDatePlusTwoDays = Calendar.current.date(byAdding: .day, value: 2, to: Date()) {
             return reservationsModel.selectedReservation != nil
+            && reservationsModel.selectedReservation?.isDeleted == false
             && reservationsModel.selectedReservation!.date > currentDatePlusTwoDays
             && (cancelReservationState.isResting || cancelReservationState.hasError)
         }

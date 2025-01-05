@@ -9,16 +9,21 @@
 import SwiftUI
 
 struct LoginPage: View {
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @EnvironmentObject var loginViewModel: LoginViewModel
     @State private var isPasswordVisible: Bool = false
     @ScaledMetric var logoSize: CGFloat = 100
     private let maxWidth: CGFloat = 600
     
+    var isVerticalCompact: Bool {
+        verticalSizeClass == .compact
+    }
+    
     var body: some View {
         VStack {
             Spacer()
             buutLogo
-            loginForm
+            loginForm   
             if (loginViewModel.loginState.isLoading) {
                 ProgressView()
             }
@@ -73,7 +78,7 @@ struct LoginPage: View {
         .disabled(loginViewModel.loginState.isLoading)
         .padding()
         .background(RoundedRectangle(cornerRadius: .infinity).stroke(.white, lineWidth: 1))
-        .padding(20)
+        .padding(isVerticalCompact ? 8 : 20)
         .foregroundColor(.white)
     }
 }

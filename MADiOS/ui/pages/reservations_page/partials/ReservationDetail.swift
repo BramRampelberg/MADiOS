@@ -27,32 +27,10 @@ struct ReservationDetail: View {
     var body: some View {
         HStack {
             if verticalSizeClass == .compact {
-                VStack {
-                    Button (action: {
-                        reservationViewModel.selectedReservation = nil
-                    }) {
-                        Image(systemName: "arrowshape.backward.fill")
-                    }
-                    Spacer()
-                }
-                .foregroundColor(Colors.primary)
-                .imageScale(.large  )
-                .padding([.top, .trailing], Constants.padding)
+                backButton
             }
             VStack(alignment: .leading, spacing: 0){
-                Text("Reservation details").font(.title)
-                ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName).padding(.bottom, Constants.groupSpacing)
-                
-                if (reservationDetailsAreValid()){
-                    accepteeInfo.padding(.bottom, Constants.groupSpacing)
-                    address.padding(.bottom, Constants.groupSpacing)
-                    if (!(reservationDetails?.mentorName?.isEmpty ?? true)) {
-                        mentor
-                    }
-                }
-                else {
-                    detailsNotAvailable.padding(.top, Constants.padding)
-                }
+                detailsInfo
                 Spacer()
                 
                 if (reservationViewModel.isCancelationPending || reservationViewModel.hasCancelError){
@@ -82,6 +60,38 @@ struct ReservationDetail: View {
                 UIDevice.current.userInterfaceIdiom == .pad ? .medium : .fraction(0.5),
             .large
         ])
+    }
+    
+    var backButton: some View {
+        VStack {
+            Button (action: {
+                reservationViewModel.selectedReservation = nil
+            }) {
+                Image(systemName: "arrowshape.backward.fill")
+            }
+            Spacer()
+        }
+        .foregroundColor(Colors.primary)
+        .imageScale(.large  )
+        .padding([.top, .trailing], Constants.padding)
+    }
+    
+    var detailsInfo: some View {
+        Group {
+            Text("Reservation details").font(.title)
+            ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName).padding(.bottom, Constants.groupSpacing)
+            
+            if (reservationDetailsAreValid()){
+                accepteeInfo.padding(.bottom, Constants.groupSpacing)
+                address.padding(.bottom, Constants.groupSpacing)
+                if (!(reservationDetails?.mentorName?.isEmpty ?? true)) {
+                    mentor
+                }
+            }
+            else {
+                detailsNotAvailable.padding(.top, Constants.padding)
+            }
+        }
     }
     
     var accepteeInfo: some View {
@@ -126,6 +136,7 @@ struct ReservationDetail: View {
         }
         .frame(maxWidth: .infinity)
     }
+    
     
     var cancelButton: some View {
         Button(action: {
