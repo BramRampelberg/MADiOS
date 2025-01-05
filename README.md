@@ -9,7 +9,8 @@
 1. Add the following keys/values to Info.plist:
 
 | Key | Value|
-| BASE_URL | $(BASE_URL) |
+| --- | --- |
+| `BASE_URL` | `$(BASE_URL)` |
 
 2. Make sure the Development and Release config files are linked to the project configurations
 
