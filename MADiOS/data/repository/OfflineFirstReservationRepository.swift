@@ -36,7 +36,7 @@ final class OfflineFirstReservationRepository {
         
         while (hasMorePages) {
             
-            let result = await reservationService.fetchReservations(isPast: false, isCanceled: false, cursor: currentCursor, pageSize: pageSize)
+            let result = await reservationService.fetchReservations(isPast: isPast, isCanceled: isCanceled, cursor: currentCursor, pageSize: pageSize)
             
             if result.isFailure {
                 hasMorePages = false
@@ -76,6 +76,11 @@ final class OfflineFirstReservationRepository {
     func getReservationDetails(for reservation: Reservation) async  -> Result<ReservationDetails> {
         let result = await reservationService.fetchReservationDetails(for: reservation)
         return result.isSuccess ? .success(data: ReservationDetails(fromDto: result.data!)) : .failure(cause: "Failed to get reservation details.", error: result.error)
+    }
+    
+    func cancelReservation(_ reservation: Reservation) async -> Result<Void> {
+        let result = await reservationService.cancelReservation(reservation)
+        return result.isSuccess ? .success(data: Void()) : .failure(cause: result.failureCause!, error: result.error)
     }
     
     private init() { }

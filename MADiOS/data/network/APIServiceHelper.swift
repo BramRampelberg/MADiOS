@@ -62,10 +62,16 @@ final class APIServiceHelper {
                     }
                     
                     if (400..<600).contains(response.statusCode){
-                        let error = APIError.init(statusCode: response.statusCode)
+                        var reasonPhrase: String? = nil
+                        if let jsonString = String(data: data, encoding: .utf8) {
+                            reasonPhrase = jsonString
+                        }
+                        let error = APIError.init(statusCode: response.statusCode, message: reasonPhrase)
                         return .failureWithLog(cause: error.localizedDescription, error: APIError(statusCode: response.statusCode))
                     }
-                    
+                    if ReturnType.self == EmptyBody.self {
+                        return .success(data: EmptyBody() as! ReturnType)
+                    }
                     let returnValue = try JSONDecoder().decode(ReturnType.self, from: data)
                     return .success(data: returnValue)
                 } catch {
@@ -110,4 +116,4 @@ enum HTTPMethod {
     }
 }
 
-struct EmptyBody: Encodable {}
+struct EmptyBody: Codable {}

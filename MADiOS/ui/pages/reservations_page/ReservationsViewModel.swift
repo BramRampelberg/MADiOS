@@ -28,6 +28,20 @@ class ReservationsViewModel: ObservableObject {
     
     @Published private var reservationsModel: ReservationsModel
     
+    @Published private var cancelReservationState: CancelReservationState = .resting
+    
+    var hasCancelError: Bool {
+        cancelReservationState.hasError
+    }
+    
+    var cancelErrorDescription: String? {
+        cancelReservationState.errorDescription
+    }
+    
+    var isCancelationPending: Bool {
+        cancelReservationState.isLoading
+    }
+    
     var reservations: [Reservation] {
         reservationsModel.reservations
     }
@@ -53,9 +67,23 @@ class ReservationsViewModel: ObservableObject {
             reservationsModel.selectedReservation
         }
         set {
-            reservationsModel.changeSelectedReservation(to: newValue)
-            setReservationDetails(for: newValue)
+            if newValue == nil {
+                deselectReservation()
+            }
+            else {
+                reservationsModel.changeSelectedReservation(to: newValue)
+                changeReservationDetailsSate(for: newValue)
+            }
         }
+    }
+    
+    var isReservationCancelable: Bool {
+        if let currentDatePlusTwoDays = Calendar.current.date(byAdding: .day, value: 2, to: Date()) {
+            return reservationsModel.selectedReservation != nil
+            && reservationsModel.selectedReservation!.date > currentDatePlusTwoDays
+            && (cancelReservationState.isResting || cancelReservationState.hasError)
+        }
+        return false
     }
     
     var isReservationSelected: Bool {
@@ -71,13 +99,12 @@ class ReservationsViewModel: ObservableObject {
     }
     
     @MainActor
-    func setReservationDetails(for reservation: Reservation?){
+    func changeReservationDetailsSate(for reservation: Reservation?){
         if reservation == nil {
             reservationsModel.changeReservationDetailsState(to: .unselected)
         } else {
             reservationsModel.changeReservationDetailsState(to: .loading)
             Task {
-                //TODO: show some kind of error to user when failure
                 let result = await reservationRepo.getReservationDetails(for: reservation!)
                 if result.isSuccess {
                     reservationsModel.changeReservationDetailsState(to: .selected(result.data!))
@@ -89,10 +116,34 @@ class ReservationsViewModel: ObservableObject {
     }
     
     @MainActor
-    func addReservation(_ reservation: Reservation) {
-        //TODO: cleanup
-        reservationRepo.addReservation(reservation)
-        getReservations()
+    func cancelReservation() {
+        if isReservationCancelable {
+            //TODO: show error on failure
+            cancelReservationState = .loading
+            Task {
+                let result = await reservationRepo.cancelReservation(reservationsModel.selectedReservation!)
+                if result.isSuccess {
+                    cancelReservationState = .resting
+                    deselectReservation()
+                    getReservations()
+                } else {
+                    cancelReservationState = .error(result.failureCause!)
+                }
+            }
+        }
+    }
+    
+    //    @MainActor
+    //    func addReservation(_ reservation: Reservation) {
+    //        //TODO: cleanup
+    //        reservationRepo.addReservation(reservation)
+    //        getReservations()
+    //    }
+    
+    @MainActor
+    private func deselectReservation(){
+        reservationsModel.changeSelectedReservation(to: nil)
+        changeReservationDetailsSate(for: nil)
     }
     
     @MainActor
@@ -107,4 +158,39 @@ class ReservationsViewModel: ObservableObject {
             reservationsModel.setReservations(to: reservationRepo.getOfflineReservations(isPast: isPast, isCanceled: isCanceled))
         }
     }
+    
+    enum CancelReservationState {
+        case resting
+        case loading
+        case error(String)
+        
+        var isResting: Bool {
+            switch self {
+            case .resting: return true
+            default: return false
+            }
+        }
+        
+        var isLoading: Bool {
+            switch self {
+            case .loading: return true
+            default: return false
+            }
+        }
+        
+        var hasError: Bool {
+            switch self {
+            case .error: return true
+            default: return false
+            }
+        }
+        
+        var errorDescription: String? {
+            switch self {
+            case .error(let description): return description
+            default: return nil
+            }
+        }
+    }
+    
 }

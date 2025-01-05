@@ -33,9 +33,13 @@ final class ReservationService {
     //        reservationRepo.addReservation(reservation)
     //    }
     //
-        func fetchReservationDetails(for reservation: Reservation) async -> Result<ReservationDetailsDto> {
-            return await serviceHelper.sendRequest(to: "api/Reservation/\(reservation.id)", method: .get)
-        }
+    func fetchReservationDetails(for reservation: Reservation) async -> Result<ReservationDetailsDto> {
+        return await serviceHelper.sendRequest(to: "api/Reservation/\(reservation.id)", method: .get)
+    }
+    
+    func cancelReservation(_ reservation: Reservation) async -> Result<EmptyBody> {
+        return await serviceHelper.sendRequest(to: "api/Reservation/cancel/\(reservation.id)", method: .patch)
+    }
     
     private init(){}
 }

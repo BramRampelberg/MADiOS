@@ -9,8 +9,10 @@
 import SwiftUI
 
 struct ReservationDetail: View {
+    @EnvironmentObject var reservationViewModel: ReservationsViewModel
     let reservation: Reservation
     let reservationDetails: ReservationDetails?
+    let isReservationCancelable: Bool
     
     private struct Constants {
         static let padding: CGFloat = 16
@@ -21,22 +23,39 @@ struct ReservationDetail: View {
     
     var body: some View {
         HStack {
-            VStack(alignment: .leading){
+            VStack(alignment: .leading, spacing: 0){
                 Text("Reservation details").font(.title)
                 ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName).padding(.bottom, Constants.groupSpacing)
                 
                 if (reservationDetailsAreValid()){
-                    accepteeInfo
-                    address
+                    accepteeInfo.padding(.bottom, Constants.groupSpacing)
+                    address.padding(.bottom, Constants.groupSpacing)
                     if (!(reservationDetails?.mentorName?.isEmpty ?? true)) {
                         mentor
                     }
                 }
                 else {
-                    detailsNotAvailable
+                    detailsNotAvailable.padding(.top, Constants.padding)
                 }
-                cancelButton
                 Spacer()
+                
+                if (reservationViewModel.isCancelationPending || reservationViewModel.hasCancelError){
+                    HStack {
+                        Spacer()
+                        VStack {
+                            if reservationViewModel.isCancelationPending {
+                                ProgressView()
+                            }
+                            if reservationViewModel.hasCancelError {
+                                Text(reservationViewModel.cancelErrorDescription!)
+                                    .foregroundColor(Colors.red)
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+                cancelButton.padding(.top, Constants.padding)
             }.padding(Constants.padding)
             Spacer()
         }
@@ -48,7 +67,6 @@ struct ReservationDetail: View {
             Text("Name: \(reservationDetails!.currentBatteryUserName!)")
             Text("Tel.: \(reservationDetails!.currentHolderPhoneNumber!)")
             Text("E-mail: \(reservationDetails!.currentHolderEmail!)")
-                .padding(.bottom, Constants.groupSpacing)
         }
     }
     
@@ -57,7 +75,6 @@ struct ReservationDetail: View {
             Text("Adres").font(Constants.groupTitleFont).foregroundColor(Constants.groupTitleColor)
             Text("\(reservationDetails!.currentHolderStreet!) \(reservationDetails!.currentHolderNumber!)")
             Text("\(reservationDetails!.currentHolderPostalCode!) \(reservationDetails!.currentHolderCity!)")
-                .padding(.bottom, Constants.groupSpacing)
         }
     }
     
@@ -72,7 +89,7 @@ struct ReservationDetail: View {
     
     var detailsNotAvailable: some View {
         VStack(alignment: .center) {
-            Image(systemName: "info.circle")
+            Image(systemName: "info.circle.fill")
                 .resizable()
                 .frame(width: 48, height: 48)
                 .foregroundColor(Colors.primary)
@@ -85,23 +102,20 @@ struct ReservationDetail: View {
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 20)
     }
     
     var cancelButton: some View {
-        //TODO: functionality and layout
         Button(action: {
-            //onCancelReservation(selectedReservation.id)
+            reservationViewModel.cancelReservation()
         }) {
-            Text("Cancel reservation")
+            Text(isReservationCancelable ? "Cancel reservation" : "Not cancelable")
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.red)
+                .background(isReservationCancelable ? Colors.red : .gray)
                 .foregroundColor(.white)
-                .cornerRadius(8)
+                .cornerRadius(100)
         }
-        .disabled(false)
-        .padding(.horizontal)
+        .disabled(!isReservationCancelable)
     }
     
     func reservationDetailsAreValid() -> Bool {
@@ -121,7 +135,8 @@ struct ReservationDetail: View {
 #Preview {
     ReservationDetail(
         reservation: Reservation(start: Date(), end: Date(), date: Date(), boatId: 1, boatPersonalName: "boatName", id: 0, isDeleted: false),
-        reservationDetails: ReservationDetails(mentorName: "mentor", batteryId: 1, currentBatteryUserName: "username", currentBatteryUserId: 1, currentHolderPhoneNumber: "phonenumber", currentHolderEmail: "email", currentHolderStreet: "street", currentHolderNumber: "number", currentHolderCity: "city", currentHolderPostalCode: "postalCode")
+        reservationDetails: ReservationDetails(mentorName: "mentor", batteryId: 1, currentBatteryUserName: "username", currentBatteryUserId: 1, currentHolderPhoneNumber: "phonenumber", currentHolderEmail: "email", currentHolderStreet: "street", currentHolderNumber: "number", currentHolderCity: "city", currentHolderPostalCode: "postalCode"),
+        isReservationCancelable: true
     )
 }
 

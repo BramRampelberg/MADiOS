@@ -11,21 +11,28 @@ import SwiftUI
 struct ReservationsPage: View {
     @StateObject var reservationsViewModel = ReservationsViewModel()
     
+    private var reservationDetailsState: ReservationDetailsState {
+        reservationsViewModel.reservationDetailsState
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             ReservationTypePicker()
             ReservationsList()
-        }.environmentObject(reservationsViewModel)
+        }
             .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
-                if reservationsViewModel.reservationDetailsState.isLoading {
+                if reservationDetailsState.isLoading {
                     ProgressView().presentationDetents([.medium, .large])
-                } else if reservationsViewModel.reservationDetailsState.hasError {
-                    Text(reservationsViewModel.reservationDetailsState.errorDescription!).font(.title2).foregroundColor(.red).presentationDetents([.medium, .large])
+                } else if reservationDetailsState.hasError {
+                    Text(reservationDetailsState.errorDescription!).font(.title2).foregroundColor(Colors.red).presentationDetents([.medium, .large])
                 } else {
-                    ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationsViewModel.reservationDetailsState.reservationDetails)
-                        .presentationDetents([.medium, .large])
+                    ScrollView {
+                        ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationDetailsState.reservationDetails, isReservationCancelable: reservationsViewModel.isReservationCancelable)
+                            .presentationDetents([.medium, .large])
+                            .presentationContentInteraction(.scrolls)
+                    }.padding(.bottom, 16)
                 }
-            }
+            }.environmentObject(reservationsViewModel)
     }
 }
 

@@ -10,5 +10,6 @@ import Foundation
 import SwiftUICore
 
 struct Colors {
-    static let primary = Color(hex: "#FF42C4BE")
+    static let primary = Color(hex: "FF42C4BE")
+    static let red = Color(hex: "FFC44244")
 }
