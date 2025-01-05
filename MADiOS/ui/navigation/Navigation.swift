@@ -20,33 +20,9 @@ struct Navigation: View {
                 LoginPage().environmentObject(loginViewModel).transition(.move(edge: .leading))
             } else {
                 if verticalSizeClass == .compact {
-                    HStack{
-                        sidebar
-                        MaximizedContainer {
-                            switch selectedPage {
-                            case .calendar:
-                                CalendarPage()
-                            case .notifications:
-                                NotificationsPage()
-                            case .profile:
-                                ProfilePage()
-                            }
-                        }
-                    }.ignoresSafeArea(edges: .leading)
-                    
+                    compactLandscapeNavigation
                 } else {
-                    TabView(selection: $selectedPage) {
-                        CalendarPage()
-                            .tabItem{
-                                Label("Calendar", systemImage: "calendar")
-                            }.tag(Page.calendar)
-                        NotificationsPage().tabItem{
-                            Label("Notifications", systemImage: "bell")
-                        }.tag(Page.notifications)
-                        ProfilePage().environmentObject(loginViewModel).tabItem{
-                            Label("Profile", systemImage: "person.crop.circle.fill")
-                        }.tag(Page.profile)
-                    }.transition(.move(edge: .trailing))
+                    portraitNavigation
                 }
             }
         }
@@ -61,34 +37,62 @@ struct Navigation: View {
         }
     }
     
+    private var portraitNavigation: some View {
+        TabView(selection: $selectedPage) {
+            CalendarPage()
+                .tabItem{
+                    Label("Calendar", systemImage: "calendar")
+                }.tag(Page.calendar)
+            NotificationsPage().tabItem{
+                Label("Notifications", systemImage: "bell")
+            }.tag(Page.notifications)
+            ProfilePage().environmentObject(loginViewModel).tabItem{
+                Label("Profile", systemImage: "person.crop.circle.fill")
+            }.tag(Page.profile)
+        }.transition(.move(edge: .trailing))
+    }
+    
+    private var compactLandscapeNavigation: some View {
+        HStack{
+            sidebar
+            MaximizedContainer {
+                switch selectedPage {
+                case .calendar:
+                    CalendarPage()
+                case .notifications:
+                    NotificationsPage()
+                case .profile:
+                    ProfilePage().environmentObject(loginViewModel)
+                }
+            }
+        }.ignoresSafeArea(edges: .leading)
+    }
+    
     private var sidebar: some View {
         List {
-            Button {
-                selectedPage = .calendar
-            } label: {
-                Label("Calendar", systemImage: "calendar")
-            }
-            .buttonStyle(.plain)
-            .listRowBackground(selectedPage == .calendar ? Color.gray.opacity(0.2) : Color.clear)
-            
-            Button {
-                selectedPage = .notifications
-            } label: {
-                Label("Notifications", systemImage: "bell")
-            }
-            .buttonStyle(.plain)
-            .listRowBackground(selectedPage == .notifications ? Color.gray.opacity(0.2) : Color.clear)
-            
-            Button {
-                selectedPage = .profile
-            } label: {
-                Label("Profile", systemImage: "person.crop.circle.fill")
-            }
-            .buttonStyle(.plain)
-            .listRowBackground(selectedPage == .profile ? Color.gray.opacity(0.2) : Color.clear)
+            SidebarButton(selectedPage: $selectedPage, page: .calendar, label: "Calendar", systemImage: "calendar")
+            SidebarButton(selectedPage: $selectedPage, page: .notifications, label: "Notifications", systemImage: "bell")
+            SidebarButton(selectedPage: $selectedPage, page: .profile, label: "Profile", systemImage: "person.crop.circle.fill")
         }
         .listStyle(SidebarListStyle())
         .frame(maxWidth: 225)
+    }
+    
+    struct SidebarButton: View {
+        @Binding var selectedPage: Page
+        let page: Page
+        let label: String
+        let systemImage: String
+        
+        var body: some View {
+            Button {
+                selectedPage = page
+            } label: {
+                Label(label, systemImage: systemImage)
+            }
+            .buttonStyle(.plain)
+            .listRowBackground(selectedPage == page ? Color.gray.opacity(0.2) : Color.clear)
+        }
     }
 }
 
@@ -101,3 +105,4 @@ enum Page: Hashable {
 #Preview {
     Navigation()
 }
+
