@@ -6,5 +6,7 @@
 	<string>8vJtbXg2FptHGmKrpFl1tZwhiXOJZ57l</string>
 	<key>Domain</key>
 	<string>rise-gent2.eu.auth0.com</string>
+	<key>Audience</key>
+	<string>https://api.buut.be</string>
 </dict>
 </plist>

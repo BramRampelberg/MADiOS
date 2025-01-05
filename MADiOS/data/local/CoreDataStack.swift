@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 // Code source: https://developer.apple.com/documentation/coredata/setting_up_a_core_data_stack
-class CoreDataStack: ObservableObject {
+final class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
     
     // Create a persistent container as a lazy variable to defer instantiation until its first use.
@@ -33,17 +33,11 @@ class CoreDataStack: ObservableObject {
     }()
     
     // Add a convenience method to commit changes to the store.
-    func save() {
+    func save() throws {
         // Verify that the context has uncommitted changes.
         guard persistentContainer.viewContext.hasChanges else { return }
         
-        do {
-            // Attempt to save changes.
-            try persistentContainer.viewContext.save()
-        } catch {
-            // Handle the error appropriately.
-            print("Failed to save the context:", error.localizedDescription)
-        }
+        try persistentContainer.viewContext.save()
     }
     
     private init() { }

@@ -12,10 +12,19 @@ enum Result<T> {
     case success(data: T)
     case failure(cause: String, error: Error? = nil)
     
+    private init(failure cause: String, error: Error? = nil, file: String = #file, function: String = #function, line: Int = #line) {
+        AppLogger.error("Failure created with cause: \(cause), error: \(error?.localizedDescription ?? "None")", file: file, function: function, line: line)
+        self = .failure(cause: cause, error: error)
+    }
+
+    static func failureWithLog(cause: String, error: Error? = nil, file: String = #file, function: String = #function, line: Int = #line) -> Result {
+        return Result(failure: cause, error: error, file: file, function: function, line: line)
+    }
+    
     var isSuccess: Bool {
         switch self {
-            case .success: return true
-            case .failure: return false
+        case .success: return true
+        case .failure: return false
         }
     }
     

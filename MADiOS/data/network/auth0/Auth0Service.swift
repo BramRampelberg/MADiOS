@@ -9,16 +9,20 @@
 import Foundation
 import Auth0
 
-class Auth0Service {
-    private let client = Auth0Manager.manager.client
+final class Auth0Service {
+    static let shared = Auth0Service()
+    
+    private let client = Auth0Manager.shared.client
     
     func login(email: String, password: String) async throws -> Credentials {
         let request = client.loginDefaultDirectory(
             withUsername: email,
             password: password,
-            audience: "https://api.buut.be",
+            audience: Auth0Manager.shared.audience,
             scope: "openid profile email roles"
         )
         return try await request.start()
     }
+    
+    private init() { }
 }

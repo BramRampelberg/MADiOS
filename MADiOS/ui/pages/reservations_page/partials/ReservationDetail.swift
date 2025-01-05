@@ -47,6 +47,23 @@ struct ReservationDetail: View {
                         Text((reservationDetails?.mentorName!)!)
                     }
                 }
+                else {
+                    VStack(alignment: .center) {
+                        Image(systemName: "info.circle")
+                            .resizable()
+                            .frame(width: 48, height: 48)
+                            .foregroundColor(Colors.primary)
+                            .padding(.top, 20)
+                        
+                        Spacer().frame(height: 8)
+                        
+                        Text("Geen ophaal informatie beschikbaar")
+                            .font(.body)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 20)
+                }
                 Spacer()
             }.padding(padding)
             Spacer()

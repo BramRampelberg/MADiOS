@@ -1,0 +1,12 @@
+//
+//  Production.xcconfig
+//  MADiOS
+//
+//  Created by Bram Rampelberg on 04/01/2025.
+//  Copyright © 2025 HOGENT. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+BASE_URL = http:/$()/localhost:5000

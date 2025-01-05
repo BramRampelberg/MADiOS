@@ -34,9 +34,22 @@
 		2993438A2CB1A2000023C9D4 /* MADiOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		29A054532D29C728005FC5CC /* Exceptions for "MADiOS" folder in "MADiOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 2993436D2CB1A1FE0023C9D4 /* MADiOS */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		299343702CB1A1FE0023C9D4 /* MADiOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				29A054532D29C728005FC5CC /* Exceptions for "MADiOS" folder in "MADiOS" target */,
+			);
 			path = MADiOS;
 			sourceTree = "<group>";
 		};
@@ -292,6 +305,8 @@
 /* Begin XCBuildConfiguration section */
 		299343922CB1A2000023C9D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 29A3E92C2D28503B00C7A1F1 /* config */;
+			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -355,6 +370,8 @@
 		};
 		299343932CB1A2000023C9D4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 29A3E92C2D28503B00C7A1F1 /* config */;
+			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -411,6 +428,8 @@
 		};
 		299343952CB1A2000023C9D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 29A3E92C2D28503B00C7A1F1 /* config */;
+			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -419,6 +438,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MADiOS/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MADiOS/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -439,6 +459,8 @@
 		};
 		299343962CB1A2000023C9D4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 29A3E92C2D28503B00C7A1F1 /* config */;
+			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -447,6 +469,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MADiOS/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MADiOS/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

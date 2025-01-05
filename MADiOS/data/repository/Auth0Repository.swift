@@ -10,9 +10,11 @@ import Foundation
 import Auth0
 import CoreData
 
-class Auth0Repository {
-    private let credentialsManager = Auth0Manager.manager.credentialsManager
-    private let auth0Service = Auth0Service()
+final class Auth0Repository {
+    static let shared = Auth0Repository()
+    
+    private let credentialsManager = Auth0Manager.shared.credentialsManager
+    private let auth0Service = Auth0Service.shared
     
     private let context = CoreDataStack.shared.persistentContainer.viewContext
     private let sharedCoreDataStack = CoreDataStack.shared
@@ -20,13 +22,13 @@ class Auth0Repository {
     func login(email: String, password: String) async -> Result<Void> {
         do {
             let credentials = try await auth0Service.login(email: email, password: password)
-            return credentialsManager.store(credentials: credentials) ? Result.success(data: Void()) : Result.failure(cause: "Failed to store credentials")
+            return credentialsManager.store(credentials: credentials) ? Result.success(data: Void()) : .failureWithLog(cause: "Failed to store credentials")
         }
         catch let error as Auth0APIError {
-            return Result.failure(cause: error.cause?.localizedDescription ?? error.localizedDescription, error: error)
+            return .failureWithLog(cause: error.cause?.localizedDescription ?? error.localizedDescription, error: error)
         }
         catch {
-            return Result.failure(cause: error.localizedDescription, error: error)
+            return .failureWithLog(cause: error.localizedDescription, error: error)
         }
     }
     
@@ -75,4 +77,6 @@ class Auth0Repository {
             print("Error saving context after deleting data: \(error)")
         }
     }
+    
+    private init() { }
 }

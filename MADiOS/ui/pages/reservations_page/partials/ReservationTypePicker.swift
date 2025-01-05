@@ -12,16 +12,24 @@ struct ReservationTypePicker: View {
     @EnvironmentObject var reservationsViewModel: ReservationsViewModel
     
     var body: some View {
-        HStack {
-            Text("Type:")
-                .font(.headline)
-            Picker("Type", selection: $reservationsViewModel.selectedReservationType) {
-                Text("Upcoming").tag(ReservationType.upcoming)
-                Text("Old").tag(ReservationType.old)
-                Text("Canceled").tag(ReservationType.canceled)
+        VStack(spacing: 0) {
+            HStack {
+                Text("Type:")
+                    .font(.headline)
+                Picker("Type", selection: $reservationsViewModel.selectedReservationType) {
+                    Text("Upcoming").tag(ReservationType.upcoming)
+                    Text("Past").tag(ReservationType.past)
+                    Text("Canceled").tag(ReservationType.canceled)
+                }
+                Spacer()
             }
-            Spacer()
-        }.padding(.horizontal, 20)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 16)
+            
+            Divider()
+                .background(Color.gray)
+                .frame(height: 1)
+        }
     }
 }
 

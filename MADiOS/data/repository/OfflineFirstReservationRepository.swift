@@ -8,20 +8,75 @@
 
 import Foundation
 
-class OfflineFirstReservationRepository {
-    private let reservationRepo = ReservationRepository()
+final class OfflineFirstReservationRepository {
+    static let shared = OfflineFirstReservationRepository()
     
-    func getReservations(isPast: Bool, isCanceled: Bool) -> [Reservation] {
-        reservationRepo.getReservations(isPast: isPast, isCanceled: isCanceled).map { enitity in
-            Reservation(fromEntity: enitity)
+    private let reservationRepo = ReservationRepository.shared
+    private let reservationService = ReservationService.shared
+    
+    private let pageSize = 20
+    
+    func getOfflineReservations(isPast: Bool, isCanceled: Bool) -> [Reservation] {
+        return reservationRepo.getReservations(isPast: isPast, isCanceled: isCanceled).map { enitity in
+            do{
+                return try Reservation(fromEntity: enitity)
+            } catch {
+                AppLogger.error(error.localizedDescription)
+            }
+            return nil
+        }.compactMap { entity in
+            return entity
         }
     }
     
-    func addReservation(_ reservation: Reservation) {
-        reservationRepo.addReservation(reservation)
+    func loadOnlineReservations(isPast: Bool, isCanceled: Bool) async -> Result<Void> {
+        var currentCursor: Int? = nil
+        var hasMorePages = true
+        var reservations = [ReservationDto]()
+        
+        while (hasMorePages) {
+            
+            let result = await reservationService.fetchReservations(isPast: false, isCanceled: false, cursor: currentCursor, pageSize: pageSize)
+            
+            if result.isFailure {
+                hasMorePages = false
+                return .failure(cause: result.failureCause!, error: result.error)
+            }
+            
+            let data = result.data!
+            
+            reservations.append(contentsOf: data.data)
+            
+            addReservations(data.data.map({ ReservationDto in
+                Reservation(fromDto: ReservationDto)
+            }))
+            
+            currentCursor = data.nextId
+            hasMorePages = data.nextId != nil && !data.data.isEmpty
+        }
+        
+        reservationRepo.clearReservations()
+        
+        addReservations(reservations.map({ ReservationDto in
+            Reservation(fromDto: ReservationDto)
+        }))
+        
+        return .success(data: Void())
     }
     
-    func getReservationDetails(for reservation: Reservation) -> ReservationDetails {
-        ReservationDetails(mentorName: "mentor", batteryId: 1, currentBatteryUserName: "username", currentBatteryUserId: 1, currentHolderPhoneNumber: "phonenumber", currentHolderEmail: "email", currentHolderStreet: "street", currentHolderNumber: "number", currentHolderCity: "city", currentHolderPostalCode: "postalCode")
+    func addReservation(_ reservation: Reservation) {
+        //TODO: do something with result
+        _ = reservationRepo.addReservation(reservation)
     }
+    
+    func addReservations(_ reservations: [Reservation]){
+        _ = reservationRepo.addReservations(reservations)
+    }
+    
+    func getReservationDetails(for reservation: Reservation) async  -> Result<ReservationDetails> {
+        let result = await reservationService.fetchReservationDetails(for: reservation)
+        return result.isSuccess ? .success(data: ReservationDetails(fromDto: result.data!)) : .failure(cause: "Failed to get reservation details.", error: result.error)
+    }
+    
+    private init() { }
 }

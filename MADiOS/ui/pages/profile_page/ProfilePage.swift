@@ -11,15 +11,17 @@ import SwiftUI
 struct ProfilePage: View {
     
     var body: some View {
-        VStack{
-            Text("name").bold().font(.title)
-            Text("email")
-                .padding(.bottom, 24)
-            ButtonsCard()
-                .padding(.bottom, 24)
-            LogoutButton()
-        }
-        .padding(24)
+        MaximizedContainer {
+            VStack{
+                Text("name").bold().font(.title)
+                Text("email")
+                    .padding(.bottom, 24)
+                ButtonsCard()
+                    .padding(.bottom, 24)
+                LogoutButton()
+            }
+            .padding(24)
+        }.background(Color(hex: "F2F2F7"))
     }
     
     struct EditButton: View {
@@ -57,7 +59,7 @@ struct ProfilePage: View {
             .padding()
             .background(Color.white)
             .cornerRadius(16)
-            .shadow(color: .gray, radius: 1.5, x: 0, y: 1)
+            .shadow(color: .gray, radius: 1, x: 0, y: 1)
         }
     }
 

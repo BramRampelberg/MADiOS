@@ -12,13 +12,19 @@ struct ReservationsPage: View {
     @StateObject var reservationsViewModel = ReservationsViewModel()
     
     var body: some View {
-            VStack {
-                ReservationTypePicker()
-                ReservationsList()
-            }.environmentObject(reservationsViewModel)
+        VStack(spacing: 0) {
+            ReservationTypePicker()
+            ReservationsList()
+        }.environmentObject(reservationsViewModel)
             .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
-                ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationsViewModel.reservationDetails)
-                    .presentationDetents([.medium, .large])
+                if reservationsViewModel.reservationDetailsState.isLoading {
+                    ProgressView().presentationDetents([.medium, .large])
+                } else if reservationsViewModel.reservationDetailsState.hasError {
+                    Text(reservationsViewModel.reservationDetailsState.errorDescription!).font(.title2).foregroundColor(.red).presentationDetents([.medium, .large])
+                } else {
+                    ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationsViewModel.reservationDetailsState.reservationDetails)
+                        .presentationDetents([.medium, .large])
+                }
             }
     }
 }
