@@ -12,62 +12,96 @@ struct ReservationDetail: View {
     let reservation: Reservation
     let reservationDetails: ReservationDetails?
     
-    let padding: CGFloat = 16
-    let groupSpacing: CGFloat = 8
-    let groupTitleColor: Color = Colors.primary
-    let groupTitleFont: Font = .title2
+    private struct Constants {
+        static let padding: CGFloat = 16
+        static let groupSpacing: CGFloat = 8
+        static let groupTitleColor: Color = Colors.primary
+        static let groupTitleFont: Font = .title2
+    }
     
     var body: some View {
         HStack {
             VStack(alignment: .leading){
                 Text("Reservation details").font(.title)
-                ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName).padding(.bottom, groupSpacing)
+                ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName).padding(.bottom, Constants.groupSpacing)
                 
                 if (reservationDetailsAreValid()){
-                    Group {
-                        Text("Info acceptee").font(groupTitleFont).foregroundColor(groupTitleColor)
-                        Text("Name: \(reservationDetails!.currentBatteryUserName!)")
-                        Text("Tel.: \(reservationDetails!.currentHolderPhoneNumber!)")
-                        Text("E-mail: \(reservationDetails!.currentHolderEmail!)")
-                            .padding(.bottom, groupSpacing)
-                    }
-                    
-                    Group {
-                        Text("Adres").font(groupTitleFont).foregroundColor(groupTitleColor)
-                        Text("\(reservationDetails!.currentHolderStreet!) \(reservationDetails!.currentHolderNumber!)")
-                        Text("\(reservationDetails!.currentHolderPostalCode!) \(reservationDetails!.currentHolderCity!)")
-                            .padding(.bottom, groupSpacing)
-                    }
-                    
-                    
+                    accepteeInfo
+                    address
                     if (!(reservationDetails?.mentorName?.isEmpty ?? true)) {
-                        Text(
-                            "Meter/Peter"
-                        ).font(groupTitleFont).foregroundColor(groupTitleColor)
-                        Text((reservationDetails?.mentorName!)!)
+                        mentor
                     }
                 }
                 else {
-                    VStack(alignment: .center) {
-                        Image(systemName: "info.circle")
-                            .resizable()
-                            .frame(width: 48, height: 48)
-                            .foregroundColor(Colors.primary)
-                            .padding(.top, 20)
-                        
-                        Spacer().frame(height: 8)
-                        
-                        Text("Geen ophaal informatie beschikbaar")
-                            .font(.body)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 20)
+                    detailsNotAvailable
                 }
+                cancelButton
                 Spacer()
-            }.padding(padding)
+            }.padding(Constants.padding)
             Spacer()
         }
+    }
+    
+    var accepteeInfo: some View {
+        Group {
+            Text("Info acceptee").font(Constants.groupTitleFont).foregroundColor(Constants.groupTitleColor)
+            Text("Name: \(reservationDetails!.currentBatteryUserName!)")
+            Text("Tel.: \(reservationDetails!.currentHolderPhoneNumber!)")
+            Text("E-mail: \(reservationDetails!.currentHolderEmail!)")
+                .padding(.bottom, Constants.groupSpacing)
+        }
+    }
+    
+    var address: some View {
+        Group {
+            Text("Adres").font(Constants.groupTitleFont).foregroundColor(Constants.groupTitleColor)
+            Text("\(reservationDetails!.currentHolderStreet!) \(reservationDetails!.currentHolderNumber!)")
+            Text("\(reservationDetails!.currentHolderPostalCode!) \(reservationDetails!.currentHolderCity!)")
+                .padding(.bottom, Constants.groupSpacing)
+        }
+    }
+    
+    var mentor: some View {
+        Group {
+            Text(
+                "Meter/Peter"
+            ).font(Constants.groupTitleFont).foregroundColor(Constants.groupTitleColor)
+            Text((reservationDetails?.mentorName!)!)
+        }
+    }
+    
+    var detailsNotAvailable: some View {
+        VStack(alignment: .center) {
+            Image(systemName: "info.circle")
+                .resizable()
+                .frame(width: 48, height: 48)
+                .foregroundColor(Colors.primary)
+                .padding(.top, 20)
+            
+            Spacer().frame(height: 8)
+            
+            Text("Geen ophaal informatie beschikbaar")
+                .font(.body)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 20)
+    }
+    
+    var cancelButton: some View {
+        //TODO: functionality and layout
+        Button(action: {
+            //onCancelReservation(selectedReservation.id)
+        }) {
+            Text("Cancel reservation")
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.red)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+        }
+        .disabled(false)
+        .padding(.horizontal)
     }
     
     func reservationDetailsAreValid() -> Bool {
@@ -81,6 +115,7 @@ struct ReservationDetail: View {
             reservationDetails?.currentHolderPostalCode?.isEmpty ?? true
         )
     }
+    
 }
 
 #Preview {
@@ -89,3 +124,5 @@ struct ReservationDetail: View {
         reservationDetails: ReservationDetails(mentorName: "mentor", batteryId: 1, currentBatteryUserName: "username", currentBatteryUserId: 1, currentHolderPhoneNumber: "phonenumber", currentHolderEmail: "email", currentHolderStreet: "street", currentHolderNumber: "number", currentHolderCity: "city", currentHolderPostalCode: "postalCode")
     )
 }
+
+
