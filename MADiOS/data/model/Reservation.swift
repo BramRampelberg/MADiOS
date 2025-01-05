@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-struct Reservation: Identifiable, Hashable {
+struct Reservation {
     var start: Date
     var end: Date
     var date: Date
@@ -50,4 +50,8 @@ struct Reservation: Identifiable, Hashable {
         id = dto.id
         isDeleted = dto.isDeleted
     }
+}
+
+extension Reservation: Identifiable, Hashable {
+    var identifier: Int { id }
 }

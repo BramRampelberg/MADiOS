@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ProfilePage: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
+    private var maxWidth: CGFloat = 600
     
     var body: some View {
         MaximizedContainer {
@@ -51,7 +52,7 @@ struct ProfilePage: View {
             settingsButton
         }
         .font(.title2)
-        .frame(minWidth: 0, maxWidth: .infinity)
+        .frame(minWidth: 0, maxWidth: maxWidth)
         .padding()
         .background(Color.white)
         .cornerRadius(16)
@@ -65,7 +66,7 @@ struct ProfilePage: View {
             HStack{
                 Image(systemName: "rectangle.portrait.and.arrow.right")
                 Text("Log out")
-            }.frame(minWidth: 0, maxWidth: .infinity)
+            }.frame(minWidth: 0, maxWidth: maxWidth)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: .infinity).stroke(.gray, lineWidth: 1))

@@ -28,7 +28,6 @@ struct ReservationsPage: View {
                 } else {
                     ScrollView {
                         ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationDetailsState.reservationDetails, isReservationCancelable: reservationsViewModel.isReservationCancelable)
-                            .presentationDetents([.medium, .large])
                             .presentationContentInteraction(.scrolls)
                     }.padding(.bottom, 16)
                 }

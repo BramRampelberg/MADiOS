@@ -11,6 +11,8 @@ import SwiftUI
 struct LoginPage: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
     @State private var isPasswordVisible: Bool = false
+    @ScaledMetric var logoSize: CGFloat = 100
+    private let maxWidth: CGFloat = 600
     
     var body: some View {
         VStack {
@@ -26,6 +28,7 @@ struct LoginPage: View {
             loginButton
             Spacer()
         }
+        .frame(minWidth: 0, maxWidth: .infinity)
         .background(Rectangle().fill(Colors.primary).ignoresSafeArea())
     }
     
@@ -33,7 +36,7 @@ struct LoginPage: View {
         Image(.buutLogoWhite)
             .resizable()
             .scaledToFit()
-            .frame(width: 100, height: 100)
+            .frame(width: logoSize, height: logoSize)
     }
     
     var loginForm: some View {
@@ -56,7 +59,7 @@ struct LoginPage: View {
             }
         }
         .scrollContentBackground(.hidden)
-        .frame(height: 175)
+        .frame(maxWidth: maxWidth, maxHeight: 175)
     }
     
     var loginButton: some View {
@@ -65,7 +68,7 @@ struct LoginPage: View {
                 loginViewModel.login()
             }
         }) {
-            Text("Login").frame(minWidth: 0, maxWidth: .infinity)
+            Text("Login").frame(minWidth: 0, maxWidth: maxWidth)
         }
         .disabled(loginViewModel.loginState.isLoading)
         .padding()

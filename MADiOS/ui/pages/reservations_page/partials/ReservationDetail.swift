@@ -14,6 +14,8 @@ struct ReservationDetail: View {
     let reservationDetails: ReservationDetails?
     let isReservationCancelable: Bool
     
+    @ScaledMetric var infoIconSize: CGFloat = 48
+    
     private struct Constants {
         static let padding: CGFloat = 16
         static let groupSpacing: CGFloat = 8
@@ -59,6 +61,13 @@ struct ReservationDetail: View {
             }.padding(Constants.padding)
             Spacer()
         }
+        .presentationDetents([
+            reservationDetailsAreValid() ?
+            UIDevice.current.userInterfaceIdiom == .pad ? .fraction(0.77) : .fraction(0.7)
+            :
+                UIDevice.current.userInterfaceIdiom == .pad ? .medium : .fraction(0.5),
+            .large
+        ])
     }
     
     var accepteeInfo: some View {
@@ -91,7 +100,7 @@ struct ReservationDetail: View {
         VStack(alignment: .center) {
             Image(systemName: "info.circle.fill")
                 .resizable()
-                .frame(width: 48, height: 48)
+                .frame(width: infoIconSize, height: infoIconSize)
                 .foregroundColor(Colors.primary)
                 .padding(.top, 20)
             
@@ -133,11 +142,13 @@ struct ReservationDetail: View {
 }
 
 #Preview {
+    @Previewable @EnvironmentObject var reservationViewModel: ReservationsViewModel
+    
     ReservationDetail(
         reservation: Reservation(start: Date(), end: Date(), date: Date(), boatId: 1, boatPersonalName: "boatName", id: 0, isDeleted: false),
         reservationDetails: ReservationDetails(mentorName: "mentor", batteryId: 1, currentBatteryUserName: "username", currentBatteryUserId: 1, currentHolderPhoneNumber: "phonenumber", currentHolderEmail: "email", currentHolderStreet: "street", currentHolderNumber: "number", currentHolderCity: "city", currentHolderPostalCode: "postalCode"),
         isReservationCancelable: true
-    )
+    ).environmentObject(reservationViewModel)
 }
 
 
