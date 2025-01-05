@@ -15,3 +15,9 @@
 2. Make sure the Development and Release config files are linked to the project configurations
 
 3. Run on simulator
+
+## Users
+
+| Email | Password |
+| --- | --- |
+| `test1@test1.com` | `gbYf5TFNPk9nuat#` |
