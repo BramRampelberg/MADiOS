@@ -11,18 +11,11 @@ import SwiftUI
 
 
 class ReservationsViewModel: ObservableObject {
-    
     private let reservationRepo = OfflineFirstReservationRepository.shared
     
     @MainActor
     init() {
-        // TODO: cleanup
-        //let calendar = Calendar(identifier: .gregorian)
-        //let yesterday = calendar.date(byAdding: .day, value: -1, to: Date())
         reservationsModel = ReservationsModel(reservations: [], selectedReservationType: ReservationType.upcoming)
-        //        for index in 0...20 {
-        //            addReservation(Reservation(start: Date(), end: Date(), date: index % 2 == 0 ? yesterday ?? Date() : Date(), boatId: 1, boatPersonalName: "boatName", id: index, isDeleted: index % 3 == 0))
-        //        }
         getReservations()
     }
     
@@ -40,6 +33,14 @@ class ReservationsViewModel: ObservableObject {
     
     var isCancelationPending: Bool {
         cancelReservationState.isLoading
+    }
+    
+    var hasReservationsError: Bool {
+        reservationsModel.reservationsErrorMessage != nil
+    }
+    
+    var reservationsErrorMessage: String? {
+        reservationsModel.reservationsErrorMessage
     }
     
     var reservations: [Reservation] {
@@ -118,7 +119,6 @@ class ReservationsViewModel: ObservableObject {
     @MainActor
     func cancelReservation() {
         if isReservationCancelable {
-            //TODO: show error on failure
             cancelReservationState = .loading
             Task {
                 let result = await reservationRepo.cancelReservation(reservationsModel.selectedReservation!)
@@ -133,13 +133,6 @@ class ReservationsViewModel: ObservableObject {
         }
     }
     
-    //    @MainActor
-    //    func addReservation(_ reservation: Reservation) {
-    //        //TODO: cleanup
-    //        reservationRepo.addReservation(reservation)
-    //        getReservations()
-    //    }
-    
     @MainActor
     private func deselectReservation(){
         reservationsModel.changeSelectedReservation(to: nil)
@@ -153,8 +146,12 @@ class ReservationsViewModel: ObservableObject {
         let isCanceled = type == .canceled
         reservationsModel.setReservations(to: reservationRepo.getOfflineReservations(isPast: isPast, isCanceled: isCanceled))
         Task{
-            //TODO: use result
-            _ = await reservationRepo.loadOnlineReservations(isPast: isPast, isCanceled: isCanceled)
+            let result = await reservationRepo.loadOnlineReservations(isPast: isPast, isCanceled: isCanceled)
+            if result.isSuccess {
+                reservationsModel.setReservationsErrorMessage(to: nil)
+            } else {
+                reservationsModel.setReservationsErrorMessage(to: "Data is not up to date:\n\(result.failureCause!.isEmpty ? "Network error!" : result.failureCause!)")
+            }
             reservationsModel.setReservations(to: reservationRepo.getOfflineReservations(isPast: isPast, isCanceled: isCanceled))
         }
     }

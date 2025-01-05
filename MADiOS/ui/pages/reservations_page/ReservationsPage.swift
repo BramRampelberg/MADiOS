@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ReservationsPage: View {
-    @StateObject var reservationsViewModel = ReservationsViewModel()
+    @StateObject private var reservationsViewModel = ReservationsViewModel()
     
     private var reservationDetailsState: ReservationDetailsState {
         reservationsViewModel.reservationDetailsState
@@ -18,20 +18,36 @@ struct ReservationsPage: View {
     var body: some View {
         VStack(spacing: 0) {
             ReservationTypePicker()
+            errorMessage
             ReservationsList()
         }
-            .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
-                if reservationDetailsState.isLoading {
-                    ProgressView().presentationDetents([.medium, .large])
-                } else if reservationDetailsState.hasError {
-                    Text(reservationDetailsState.errorDescription!).font(.title2).foregroundColor(Colors.red).presentationDetents([.medium, .large])
-                } else {
-                    ScrollView {
-                        ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationDetailsState.reservationDetails, isReservationCancelable: reservationsViewModel.isReservationCancelable)
-                            .presentationContentInteraction(.scrolls)
-                    }.padding(.bottom, 16)
-                }
-            }.environmentObject(reservationsViewModel)
+        .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
+            if reservationDetailsState.isLoading {
+                ProgressView().presentationDetents([.medium, .large])
+            } else if reservationDetailsState.hasError {
+                Text(reservationDetailsState.errorDescription!).font(.title2).foregroundColor(Colors.red).presentationDetents([.medium, .large])
+            } else {
+                ScrollView {
+                    ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationDetailsState.reservationDetails, isReservationCancelable: reservationsViewModel.isReservationCancelable)
+                        .presentationContentInteraction(.scrolls)
+                }.padding(.bottom, 16)
+            }
+        }.environmentObject(reservationsViewModel)
+    }
+    
+    var errorMessage: some View {
+        VStack{
+            if (reservationsViewModel.hasReservationsError){
+                Text(reservationsViewModel.reservationsErrorMessage!)
+                    .font(.title)
+                    .bold()
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(.white)
+                    .contentShape(Rectangle()).background(Colors.red)
+                    .multilineTextAlignment(.center)
+            }
+        }
     }
 }
 
@@ -40,4 +56,4 @@ struct ReservationsPage: View {
     
     ReservationsPage().environmentObject(reservationsViewModel)
 }
-//
+

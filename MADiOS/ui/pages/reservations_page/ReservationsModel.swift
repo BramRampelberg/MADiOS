@@ -10,12 +10,17 @@ import Foundation
 
 struct ReservationsModel {
     private(set) var reservations: [Reservation]
+    private(set) var reservationsErrorMessage: String?
     private(set) var selectedReservation: Reservation?
     private(set) var selectedReservationType: ReservationType
     private(set) var reservationDetailsState: ReservationDetailsState = .unselected
     
     mutating func setReservations(to reservations: [Reservation]){
         self.reservations = reservations
+    }
+    
+    mutating func setReservationsErrorMessage(to message: String?){
+        self.reservationsErrorMessage = message
     }
     
     mutating func changeReservationDetailsState(to state: ReservationDetailsState){

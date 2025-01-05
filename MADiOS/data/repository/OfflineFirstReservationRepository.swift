@@ -64,11 +64,6 @@ final class OfflineFirstReservationRepository {
         return .success(data: Void())
     }
     
-    func addReservation(_ reservation: Reservation) {
-        //TODO: do something with result
-        _ = reservationRepo.addReservation(reservation)
-    }
-    
     func addReservations(_ reservations: [Reservation]){
         _ = reservationRepo.addReservations(reservations)
     }

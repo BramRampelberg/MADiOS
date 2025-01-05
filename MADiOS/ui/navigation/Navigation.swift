@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct Navigation: View {
-    @StateObject var loginViewModel = LoginViewModel()
+    @StateObject private var loginViewModel = LoginViewModel()
     @State var selectedPage = Page.calendar
     @State private var isLoggedIn = false
     

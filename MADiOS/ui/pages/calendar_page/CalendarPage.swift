@@ -14,6 +14,7 @@ struct CalendarPage: View {
     
     var body: some View {
         VStack {
+            GlobalNotification()
             SlidingTabView(selection: $selectedTab, tabs: ["Calendar", "Reservations"])
             MaximizedContainer {
                 if selectedTab == 0 {
