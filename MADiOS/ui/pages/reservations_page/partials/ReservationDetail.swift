@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ReservationDetail: View {
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @EnvironmentObject var reservationViewModel: ReservationsViewModel
     let reservation: Reservation
     let reservationDetails: ReservationDetails?
@@ -25,6 +26,19 @@ struct ReservationDetail: View {
     
     var body: some View {
         HStack {
+            if verticalSizeClass == .compact {
+                VStack {
+                    Button (action: {
+                        reservationViewModel.selectedReservation = nil
+                    }) {
+                        Image(systemName: "arrowshape.backward.fill")
+                    }
+                    Spacer()
+                }
+                .foregroundColor(Colors.primary)
+                .imageScale(.large  )
+                .padding([.top, .trailing], Constants.padding)
+            }
             VStack(alignment: .leading, spacing: 0){
                 Text("Reservation details").font(.title)
                 ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName).padding(.bottom, Constants.groupSpacing)
