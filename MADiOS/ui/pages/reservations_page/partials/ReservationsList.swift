@@ -30,8 +30,8 @@ struct ReservationsList: View {
             Button(action: {
                 reservationsViewModel.selectedReservation = reservation
             }) {
-                ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName)
-            }.foregroundColor(.primary)
+                ImportantReservationInfo(reservation: reservation)
+            }
         }
     }
     

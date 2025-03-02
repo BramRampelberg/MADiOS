@@ -9,22 +9,23 @@
 import SwiftUI
 
 struct ImportantReservationInfo: View {
-    let date: Date
-    let start: Date
-    let end: Date
-    let boatPersonalName: String
+    let reservation: Reservation
     
     var body: some View {
         VStack(alignment: .leading){
-            Text("Date: \(date.formatted(.dateTime.day().month().year()))")
-                .font(.title3)
-            Text("\(start.formatted(.dateTime.hour().minute())) - \(end.formatted(.dateTime.hour().minute()))")
-                .font(.system(.title))
-            Text("Boat: \(boatPersonalName)")
-        }
+            Label(reservation.date.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
+                .font(.headline)
+                .foregroundColor(.primary)
+            Label("\(reservation.start.formatted(date: .omitted, time: .shortened)) - \(reservation.end.formatted(date: .omitted, time: .shortened))", systemImage: "clock")
+                .font(.subheadline)
+                .foregroundColor(.primary)
+            Label(reservation.boatPersonalName, systemImage: "sailboat.fill")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }.padding(.vertical, 5)
     }
 }
 
 #Preview {
-    ImportantReservationInfo(date: Date(), start: Date(), end: Date(), boatPersonalName: "boatname")
+    ImportantReservationInfo(reservation: Reservation(start: Date(), end: Date(), date: Date(), boatId: 1, boatPersonalName: "test", id: 1, isDeleted: false))
 }

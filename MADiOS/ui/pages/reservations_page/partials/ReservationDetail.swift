@@ -15,43 +15,52 @@ struct ReservationDetail: View {
     let reservationDetails: ReservationDetails?
     let isReservationCancelable: Bool
     
-    @ScaledMetric var infoIconSize: CGFloat = 48
-    
-    private struct Constants {
-        static let padding: CGFloat = 16
-        static let groupSpacing: CGFloat = 8
-        static let groupTitleColor: Color = Colors.primary
-        static let groupTitleFont: Font = .title2
-    }
+    @State private var showCancelErrorAlert = false
     
     var body: some View {
-        HStack {
-            if verticalSizeClass == .compact {
-                backButton
+        Form {
+            Section(header: Text("Reservation Details").font(.title2)) {
+                ImportantReservationInfo(reservation: reservation)
             }
-            VStack(alignment: .leading, spacing: 0){
-                detailsInfo
-                Spacer()
+            
+            if reservationDetailsAreValid() {
+                Section(header: Text("Acceptee Info")) {
+                    infoRow(label: "Name", value: reservationDetails!.currentBatteryUserName!)
+                    infoRow(label: "Phone", value: reservationDetails!.currentHolderPhoneNumber!)
+                    infoRow(label: "E-mail", value: reservationDetails!.currentHolderEmail!)
+                }
                 
-                if (reservationViewModel.isCancelationPending || reservationViewModel.hasCancelError){
+                Section(header: Text("Address")) {
+                    infoRow(label: "Street", value: "\(reservationDetails!.currentHolderStreet!) \(reservationDetails!.currentHolderNumber!)")
+                    infoRow(label: "City", value: "\(reservationDetails!.currentHolderPostalCode!) \(reservationDetails!.currentHolderCity!)")
+                }
+                
+                if let mentorName = reservationDetails?.mentorName, !mentorName.isEmpty {
+                    Section(header: Text("Mentor")) {
+                        Text(mentorName)
+                    }
+                }
+            } else {
+                Section {
+                    detailsNotAvailable
+                }
+            }
+            
+            if reservationViewModel.isCancelationPending {
+                Section {
                     HStack {
                         Spacer()
-                        VStack {
-                            if reservationViewModel.isCancelationPending {
-                                ProgressView()
-                            }
-                            if reservationViewModel.hasCancelError {
-                                Text(reservationViewModel.cancelErrorDescription!)
-                                    .foregroundColor(Colors.red)
-                                    .multilineTextAlignment(.center)
-                            }
-                        }
+                        ProgressView().padding()
                         Spacer()
                     }
                 }
-                cancelButton.padding(.top, Constants.padding)
-            }.padding(Constants.padding)
-            Spacer()
+            }
+            
+            if isReservationCancelable {
+                Section {
+                    cancelButton
+                }
+            }
         }
         .presentationDetents([
             reservationDetailsAreValid() ?
@@ -62,94 +71,39 @@ struct ReservationDetail: View {
         ])
     }
     
-    var backButton: some View {
-        VStack {
-            Button (action: {
-                reservationViewModel.selectedReservation = nil
-            }) {
-                Image(systemName: "arrowshape.backward.fill")
-            }
+    func infoRow(label: String, value: String) -> some View {
+        HStack {
+            Text(label)
+                .foregroundColor(.secondary)
             Spacer()
-        }
-        .foregroundColor(Colors.primary)
-        .imageScale(.large  )
-        .padding([.top, .trailing], Constants.padding)
-    }
-    
-    var detailsInfo: some View {
-        Group {
-            Text("Reservation details").font(.title)
-            ImportantReservationInfo(date: reservation.date, start: reservation.start, end: reservation.end, boatPersonalName: reservation.boatPersonalName).padding(.bottom, Constants.groupSpacing)
-            
-            if (reservationDetailsAreValid()){
-                accepteeInfo.padding(.bottom, Constants.groupSpacing)
-                address.padding(.bottom, Constants.groupSpacing)
-                if (!(reservationDetails?.mentorName?.isEmpty ?? true)) {
-                    mentor
-                }
-            }
-            else {
-                detailsNotAvailable.padding(.top, Constants.padding)
-            }
-        }
-    }
-    
-    var accepteeInfo: some View {
-        Group {
-            Text("Info acceptee").font(Constants.groupTitleFont).foregroundColor(Constants.groupTitleColor)
-            Text("Name: \(reservationDetails!.currentBatteryUserName!)")
-            Text("Tel.: \(reservationDetails!.currentHolderPhoneNumber!)")
-            Text("E-mail: \(reservationDetails!.currentHolderEmail!)")
-        }
-    }
-    
-    var address: some View {
-        Group {
-            Text("Adres").font(Constants.groupTitleFont).foregroundColor(Constants.groupTitleColor)
-            Text("\(reservationDetails!.currentHolderStreet!) \(reservationDetails!.currentHolderNumber!)")
-            Text("\(reservationDetails!.currentHolderPostalCode!) \(reservationDetails!.currentHolderCity!)")
-        }
-    }
-    
-    var mentor: some View {
-        Group {
-            Text(
-                "Meter/Peter"
-            ).font(Constants.groupTitleFont).foregroundColor(Constants.groupTitleColor)
-            Text((reservationDetails?.mentorName!)!)
+            Text(value)
+                .multilineTextAlignment(.trailing)
         }
     }
     
     var detailsNotAvailable: some View {
-        VStack(alignment: .center) {
+        VStack {
             Image(systemName: "info.circle.fill")
                 .resizable()
-                .frame(width: infoIconSize, height: infoIconSize)
-                .foregroundColor(Colors.primary)
+                .frame(width: 48, height: 48)
+                .foregroundColor(.blue)
                 .padding(.top, 20)
             
-            Spacer().frame(height: 8)
-            
-            Text("Geen ophaal informatie beschikbaar")
+            Text("No pickup information available")
                 .font(.body)
                 .multilineTextAlignment(.center)
+                .padding(.top, 8)
         }
         .frame(maxWidth: .infinity)
     }
     
-    
     var cancelButton: some View {
-        Button(action: {
-            reservationViewModel.cancelReservation()
-        }) {
-            Text(isReservationCancelable ? "Cancel reservation" : "Not cancelable")
+        Button(role: .destructive, action: {reservationViewModel.cancelReservation()}) {
+            Label("Cancel Reservation", systemImage: "xmark.circle.fill")
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(isReservationCancelable ? Colors.red : .gray)
-                .foregroundColor(.white)
-                .cornerRadius(100)
+                .foregroundColor(.red)
         }
-        .disabled(!isReservationCancelable)
     }
     
     func reservationDetailsAreValid() -> Bool {
@@ -163,7 +117,6 @@ struct ReservationDetail: View {
             reservationDetails?.currentHolderPostalCode?.isEmpty ?? true
         )
     }
-    
 }
 
 #Preview {

@@ -146,7 +146,7 @@ class ReservationsViewModel: ObservableObject {
         let isPast = type == .past
         let isCanceled = type == .canceled
         reservationsModel.setReservations(to: reservationRepo.getOfflineReservations(isPast: isPast, isCanceled: isCanceled))
-        Task{
+        Task {
             let result = await reservationRepo.loadOnlineReservations(isPast: isPast, isCanceled: isCanceled)
             if result.isSuccess {
                 reservationsModel.setReservationsErrorMessage(to: nil)

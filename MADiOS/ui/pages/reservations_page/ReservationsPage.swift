@@ -16,23 +16,26 @@ struct ReservationsPage: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            ReservationTypePicker()
-            errorMessage
-            ReservationsList()
-        }
-        .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
-            if reservationDetailsState.isLoading {
-                ProgressView().presentationDetents([.medium, .large])
-            } else if reservationDetailsState.hasError {
-                Text(reservationDetailsState.errorDescription!).font(.title2).foregroundColor(Colors.red).presentationDetents([.medium, .large])
-            } else {
-                ScrollView {
-                    ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationDetailsState.reservationDetails, isReservationCancelable: reservationsViewModel.isReservationCancelable)
-                        .presentationContentInteraction(.scrolls)
-                }.padding(.bottom, 16)
+        VStack {
+            GlobalNotification()
+            MaximizedContainer{
+                VStack(spacing: 0) {
+                    ReservationTypePicker()
+                    errorMessage
+                    ReservationsList()
+                }
+                .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
+                    if reservationDetailsState.isLoading {
+                        ProgressView().presentationDetents([.medium, .large])
+                    } else if reservationDetailsState.hasError {
+                        Text(reservationDetailsState.errorDescription!).font(.title2).foregroundColor(Colors.red).presentationDetents([.medium, .large])
+                    } else {
+                            ReservationDetail(reservation: reservationsViewModel.selectedReservation!, reservationDetails: reservationDetailsState.reservationDetails, isReservationCancelable: reservationsViewModel.isReservationCancelable)
+                                .presentationContentInteraction(.scrolls)
+                    }
+                }.environmentObject(reservationsViewModel)
             }
-        }.environmentObject(reservationsViewModel)
+        }
     }
     
     var errorMessage: some View {

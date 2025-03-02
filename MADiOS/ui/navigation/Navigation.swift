@@ -11,7 +11,7 @@ import SwiftUI
 struct Navigation: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @StateObject private var loginViewModel = LoginViewModel()
-    @State var selectedPage = Page.calendar
+    @State var selectedPage = Page.reservations
     @State private var isLoggedIn = false
     
     var body: some View {
@@ -32,20 +32,17 @@ struct Navigation: View {
         .onChange(of: loginViewModel.loginState.isLoggedIn){ _, newState in
             withAnimation {
                 self.isLoggedIn = newState
-                selectedPage = .calendar
+                selectedPage = .reservations
             }
         }
     }
     
     private var portraitNavigation: some View {
         TabView(selection: $selectedPage) {
-            CalendarPage()
+            ReservationsPage()
                 .tabItem{
-                    Label("Calendar", systemImage: "calendar")
-                }.tag(Page.calendar)
-            NotificationsPage().tabItem{
-                Label("Notifications", systemImage: "bell")
-            }.tag(Page.notifications)
+                    Label("Reservations", systemImage: "calendar")
+                }.tag(Page.reservations)
             ProfilePage().environmentObject(loginViewModel).tabItem{
                 Label("Profile", systemImage: "person.crop.circle.fill")
             }.tag(Page.profile)
@@ -57,10 +54,8 @@ struct Navigation: View {
             sidebar
             MaximizedContainer {
                 switch selectedPage {
-                case .calendar:
-                    CalendarPage()
-                case .notifications:
-                    NotificationsPage()
+                case .reservations:
+                    ReservationsPage()
                 case .profile:
                     ProfilePage().environmentObject(loginViewModel)
                 }
@@ -70,8 +65,7 @@ struct Navigation: View {
     
     private var sidebar: some View {
         List {
-            SidebarButton(selectedPage: $selectedPage, page: .calendar, label: "Calendar", systemImage: "calendar")
-            SidebarButton(selectedPage: $selectedPage, page: .notifications, label: "Notifications", systemImage: "bell")
+            SidebarButton(selectedPage: $selectedPage, page: .reservations, label: "Calendar", systemImage: "calendar")
             SidebarButton(selectedPage: $selectedPage, page: .profile, label: "Profile", systemImage: "person.crop.circle.fill")
         }
         .listStyle(SidebarListStyle())
@@ -97,8 +91,7 @@ struct Navigation: View {
 }
 
 enum Page: Hashable {
-    case calendar
-    case notifications
+    case reservations
     case profile
 }
 
