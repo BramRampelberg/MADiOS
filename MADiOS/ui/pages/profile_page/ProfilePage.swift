@@ -9,54 +9,27 @@
 import SwiftUI
 
 struct ProfilePage: View {
+    @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var loginViewModel: LoginViewModel
     private var maxWidth: CGFloat = 600
     
     var body: some View {
         MaximizedContainer {
             VStack{
-                Text("name").bold().font(.title)
-                Text("email")
-                    .padding(.bottom, 24)
-                buttonsCard
-                    .padding(.bottom, 24)
-                logoutButton
+                if (profileViewModel.userState.hasError){
+                    Text(profileViewModel.userState.errorDescription!).font(.title2).foregroundColor(Colors.red)
+                }
+                if (profileViewModel.userState.isLoading){
+                    ProgressView()
+                }
+                if (profileViewModel.userState.isSuccess){
+                    Text(profileViewModel.firstName + " " + profileViewModel.familyName).bold().font(.title)
+                    Text(profileViewModel.email)
+                }
+                logoutButton.padding(.top, 24)
             }
             .padding(24)
         }.background(Color(hex: "F2F2F7"))
-    }
-    
-    var editButton: some View {
-        HStack {
-            Image(systemName: "pencil")
-            Button("Edit profile"){
-                
-            }
-            .disabled(true)
-        }
-    }
-    
-    var settingsButton: some View {
-        HStack {
-            Image(systemName: "gearshape.fill")
-            Button("Settings"){
-                
-            }
-            .disabled(true)
-        }
-    }
-    
-    var buttonsCard: some View {
-        VStack (alignment: .leading){
-            editButton
-            settingsButton
-        }
-        .font(.title2)
-        .frame(minWidth: 0, maxWidth: maxWidth)
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .gray, radius: 1, x: 0, y: 1)
     }
     
     var logoutButton: some View {
@@ -75,5 +48,7 @@ struct ProfilePage: View {
 }
 
 #Preview {
-    ProfilePage()
+    @Previewable @StateObject var profileViewModel = ProfileViewModel()
+    @Previewable @StateObject var loginViewModel = LoginViewModel()
+    ProfilePage().environmentObject(profileViewModel).environmentObject(loginViewModel)
 }

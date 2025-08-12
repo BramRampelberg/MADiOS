@@ -29,10 +29,6 @@ final class ReservationService {
         return await serviceHelper.sendRequest(to: "api/Reservation/me", method: .get, queryParams: queryParams)
     }
     
-    //    func postReservation(_ reservation: Reservation) {
-    //        reservationRepo.addReservation(reservation)
-    //    }
-    //
     func fetchReservationDetails(for reservation: Reservation) async -> Result<ReservationDetailsDto> {
         return await serviceHelper.sendRequest(to: "api/Reservation/\(reservation.id)", method: .get)
     }

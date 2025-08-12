@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ReservationsPage: View {
-    @StateObject private var reservationsViewModel = ReservationsViewModel()
+    @EnvironmentObject var reservationsViewModel: ReservationsViewModel
     
     private var reservationDetailsState: ReservationDetailsState {
         reservationsViewModel.reservationDetailsState
