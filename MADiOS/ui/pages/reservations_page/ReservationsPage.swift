@@ -17,7 +17,6 @@ struct ReservationsPage: View {
     
     var body: some View {
         VStack {
-            GlobalNotification()
             MaximizedContainer{
                 VStack(spacing: 0) {
                     ReservationTypePicker()
