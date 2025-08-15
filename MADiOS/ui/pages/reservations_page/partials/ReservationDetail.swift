@@ -120,7 +120,7 @@ struct ReservationDetail: View {
 }
 
 #Preview {
-    @Previewable @EnvironmentObject var reservationViewModel: ReservationsViewModel
+    @Previewable var reservationViewModel = ReservationsViewModel()
     
     ReservationDetail(
         reservation: Reservation(start: Date(), end: Date(), date: Date(), boatId: 1, boatPersonalName: "boatName", id: 0, isDeleted: false),
