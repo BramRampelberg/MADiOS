@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		29A3E92B2D284D7100C7A1F1 /* Auth0 in Frameworks */ = {isa = PBXBuildFile; productRef = 29A3E92A2D284D7100C7A1F1 /* Auth0 */; };
-		29BA0C8A2D25F88E00F0376D /* SlidingTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 29BA0C892D25F88E00F0376D /* SlidingTabView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +74,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29BA0C8A2D25F88E00F0376D /* SlidingTabView in Frameworks */,
 				29A3E92B2D284D7100C7A1F1 /* Auth0 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,7 +137,6 @@
 			);
 			name = MADiOS;
 			packageProductDependencies = (
-				29BA0C892D25F88E00F0376D /* SlidingTabView */,
 				29A3E92A2D284D7100C7A1F1 /* Auth0 */,
 			);
 			productName = MADiOS;
@@ -226,7 +223,6 @@
 			mainGroup = 299343652CB1A1FE0023C9D4;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */,
 				29A3E9292D284D7100C7A1F1 /* XCRemoteSwiftPackageReference "Auth0" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -606,14 +602,6 @@
 				minimumVersion = 2.10.0;
 			};
 		};
-		29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/QuynhNguyen/SlidingTabView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -621,11 +609,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 29A3E9292D284D7100C7A1F1 /* XCRemoteSwiftPackageReference "Auth0" */;
 			productName = Auth0;
-		};
-		29BA0C892D25F88E00F0376D /* SlidingTabView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 29BA0C882D25F88E00F0376D /* XCRemoteSwiftPackageReference "SlidingTabView" */;
-			productName = SlidingTabView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

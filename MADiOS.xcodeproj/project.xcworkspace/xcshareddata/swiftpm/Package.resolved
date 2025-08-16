@@ -1,5 +1,5 @@
 {
-  "originHash" : "8365299ea3df1f20db2c1ac258a0536ca1feb5b471d716e70b35e0be4d8213c8",
+  "originHash" : "826322d1d6ee99103c16e2af512642d9a91d5aa54027376ed63ee9e0b9ddd641",
   "pins" : [
     {
       "identity" : "auth0.swift",
@@ -26,15 +26,6 @@
       "state" : {
         "revision" : "b694f155907b189bc82e93586695a26f558c742f",
         "version" : "1.2.0"
-      }
-    },
-    {
-      "identity" : "slidingtabview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/QuynhNguyen/SlidingTabView",
-      "state" : {
-        "revision" : "b0f0662977418824d50546b2850a523dcd793bb0",
-        "version" : "1.0.2"
       }
     }
   ],
