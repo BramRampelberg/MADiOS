@@ -8,16 +8,12 @@
 
 import Foundation
 import Auth0
-import CoreData
 
 final class Auth0Repository {
     static let shared = Auth0Repository()
     
     private let credentialsManager = Auth0Manager.shared.credentialsManager
     private let auth0Service = Auth0Service.shared
-    
-    private let context = CoreDataStack.shared.persistentContainer.viewContext
-    private let sharedCoreDataStack = CoreDataStack.shared
     
     func login(email: String, password: String) async -> Result<Void> {
         do {
@@ -35,7 +31,6 @@ final class Auth0Repository {
     func logout() -> Bool {
         let success = credentialsManager.clear()
         if success {
-            clearLocalDatabase()
             return success
         }
         return false
@@ -47,35 +42,6 @@ final class Auth0Repository {
     
     func userIsLoggedIn() -> Bool {
         credentialsManager.hasValid()
-    }
-    
-    func clearLocalDatabase(){
-        let entities = sharedCoreDataStack.persistentContainer.managedObjectModel.entities.filter{ entity in
-            entity.name != nil
-        }.map{ entity in
-            entity.name!
-        }
-        
-        for entityName in entities {
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(
-                entityName: entityName
-            )
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-            
-            do {
-                try context.execute(deleteRequest)
-            } catch {
-                print(
-                    "Error deleting all data for entity \(entityName): \(error)"
-                )
-            }
-        }
-        
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context after deleting data: \(error)")
-        }
     }
     
     private init() { }

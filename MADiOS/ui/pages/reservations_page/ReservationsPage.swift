@@ -20,8 +20,13 @@ struct ReservationsPage: View {
             MaximizedContainer{
                 VStack(spacing: 0) {
                     ReservationTypePicker()
-                    errorMessage
-                    ReservationsList()
+                    if (reservationsViewModel.areReservationsLoading){
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    } else {
+                        ReservationsList()
+                    }
                 }
                 .sheet(isPresented: $reservationsViewModel.isReservationSelected) {
                     if reservationDetailsState.isLoading {

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CoreData
 
 struct Reservation {
     var start: Date
@@ -27,19 +26,7 @@ struct Reservation {
         self.id = id
         self.isDeleted = isDeleted
     }
-    
-    init(fromEntity entity: ReservationEntity) throws {
-        if (entity.start == nil || entity.end == nil || entity.date == nil) {
-            throw EntityConversionError(localizedDescription: "Failed to convert ReservationEnitity to Reservation: start, end or date was nil")
-        }
-        start = entity.start!
-        end = entity.end!
-        date = entity.date!
-        boatId = Int(entity.boatId)
-        boatPersonalName = entity.boatPersonalName!
-        id = Int(entity.id)
-        isDeleted = entity.isRemoved
-    }
+
     
     init(fromDto dto: ReservationDto) {
         start = dto.start
