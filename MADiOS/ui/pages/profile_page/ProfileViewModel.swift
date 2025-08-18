@@ -16,7 +16,6 @@ class ProfileViewModel: ObservableObject {
     @MainActor
     init() {
         self.userModel = UserModel(email: "", firstName: "", familyName: "")
-        getUser()
     }
     
     var userState: UserState {
@@ -47,7 +46,7 @@ class ProfileViewModel: ObservableObject {
     }
     
     @MainActor
-    private func getUser() {
+    func getUser() {
         Task{
             let result = await userRepo.getUser()
             if (result.isSuccess){
