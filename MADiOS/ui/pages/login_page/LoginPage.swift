@@ -55,7 +55,7 @@ struct LoginPage: View {
                     else {
                         SecureField("Password", text: $loginViewModel.password)
                     }
-                    Image(systemName: isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+                    Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
                         .foregroundColor(.gray)
                         .onTapGesture {
                             isPasswordVisible.toggle()
